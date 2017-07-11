@@ -355,6 +355,7 @@ struct AACContext {
 
     OutputConfiguration oc[2];
     int warned_num_aac_frames;
+    int warned_960_sbr;
 
     /* aacdec functions pointers */
     void (*imdct_and_windowing)(AACContext *ac, SingleChannelElement *sce);
