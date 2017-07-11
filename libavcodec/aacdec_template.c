@@ -2650,8 +2650,8 @@ static void imdct_and_windowing_960(AACContext *ac, SingleChannelElement *sce)
 
     // imdct
     if (ics->window_sequence[0] == EIGHT_SHORT_SEQUENCE) {
-        for (i = 0; i < 960; i += 120)
-            ac->mdct120->imdct_half(ac->mdct120, buf + i, in + i, 1);
+        for (i = 0; i < 8; i++)
+            ac->mdct120->imdct_half(ac->mdct120, buf + i * 120, in + i * 128, 1);
     } else {
         ac->mdct960->imdct_half(ac->mdct960, buf, in, 1);
     }
