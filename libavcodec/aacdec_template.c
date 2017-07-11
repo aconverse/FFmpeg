@@ -812,6 +812,12 @@ static int decode_ga_specific_config(AACContext *ac, AVCodecContext *avctx,
     int tags = 0;
 
     m4ac->frame_length_short = get_bits1(gb);
+    if (m4ac->frame_length_short && m4ac->sbr == 1) {
+      avpriv_report_missing_feature(avctx, "SBR with 960 frame length");
+      if (ac) ac->warned_960_sbr = 1;
+      m4ac->sbr = 0;
+      m4ac->ps = 0;
+    }
 
     if (get_bits1(gb))       // dependsOnCoreCoder
         skip_bits(gb, 14);   // coreCoderDelay
@@ -2371,6 +2377,13 @@ static int decode_extension_payload(AACContext *ac, GetBitContext *gb, int cnt,
     case EXT_SBR_DATA:
         if (!che) {
             av_log(ac->avctx, AV_LOG_ERROR, "SBR was found before the first channel element.\n");
+            return res;
+        } else if (ac->oc[1].m4ac.frame_length_short) {
+            if (!ac->warned_960_sbr)
+              avpriv_report_missing_feature(ac->avctx,
+                                            "SBR with 960 frame length");
+            ac->warned_960_sbr = 1;
+            skip_bits_long(gb, 8 * cnt - 4);
             return res;
         } else if (!ac->oc[1].m4ac.sbr) {
             av_log(ac->avctx, AV_LOG_ERROR, "SBR signaled to be not-present but was found in the bitstream.\n");
