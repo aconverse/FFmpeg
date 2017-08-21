@@ -39,8 +39,6 @@ DECLARE_ALIGNED(32, float,  ff_aac_kbd_long_1024)[1024];
 DECLARE_ALIGNED(32, float,  ff_aac_kbd_short_128)[128];
 DECLARE_ALIGNED(32, float,  ff_aac_kbd_long_960)[960];
 DECLARE_ALIGNED(32, float,  ff_aac_kbd_short_120)[120];
-DECLARE_ALIGNED(32, int,    ff_aac_kbd_long_960_fixed)[960];
-DECLARE_ALIGNED(32, int,    ff_aac_kbd_short_120_fixed)[120];
 DECLARE_ALIGNED(32, int,    ff_aac_kbd_long_1024_fixed)[1024];
 DECLARE_ALIGNED(32, int,    ff_aac_kbd_short_128_fixed)[128];
 
