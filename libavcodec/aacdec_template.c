@@ -811,6 +811,13 @@ static int decode_ga_specific_config(AACContext *ac, AVCodecContext *avctx,
     uint8_t layout_map[MAX_ELEM_ID*4][3];
     int tags = 0;
 
+#if USE_FIXED
+    if (get_bits1(gb)) { // frameLengthFlag
+        avpriv_report_missing_feature(avctx, "Fixed point 960/120 MDCT window");
+        return AVERROR_PATCHWELCOME;
+    }
+    m4ac->frame_length_short = 0;
+#else
     m4ac->frame_length_short = get_bits1(gb);
     if (m4ac->frame_length_short && m4ac->sbr == 1) {
       avpriv_report_missing_feature(avctx, "SBR with 960 frame length");
@@ -818,6 +825,7 @@ static int decode_ga_specific_config(AACContext *ac, AVCodecContext *avctx,
       m4ac->sbr = 0;
       m4ac->ps = 0;
     }
+#endif
 
     if (get_bits1(gb))       // dependsOnCoreCoder
         skip_bits(gb, 14);   // coreCoderDelay
